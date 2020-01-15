@@ -1,0 +1,47 @@
+{
+  "name": "react-swapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "tslint": "tslint -p . -c tslint.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcornag/React-swapi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lcornag/React-swapi/issues"
+  },
+  "homepage": "https://github.com/lcornag/React-swapi#readme",
+  "dependencies": {
+    "next": "^9.2.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.7",
+    "@types/react": "^16.9.17",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "husky": "^4.0.10",
+    "prettier": "^1.19.1",
+    "tslint": "^5.20.1",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-react-hooks": "^2.2.1",
+    "typescript": "^3.7.4"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "printWidth": 80
+  },
+  "hooks": {
+    "pre-commit": "npm run tslint"
+  }
+}
