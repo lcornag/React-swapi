@@ -1,0 +1,41 @@
+.header {
+  flex-direction: row;
+  display: flex;
+  background-color: black;
+  height: 4rem;
+  border-bottom: 1px solid white;
+  justify-content: space-evenly;
+}
+a,
+a:visited {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  cursor: pointer;
+}
+.homepageLink,
+.listLink,
+.lastVisited,
+.searchbar {
+  display: flex;
+  padding: 0 1rem;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.searchbar {
+  flex-direction: row;
+  justify-content: flex-start;
+  color: white;
+}
+.searchbar input {
+  background-color: black;
+  color: white;
+  border: none;
+  padding-left: 10%;
+  width: 100%;
+}
+.searchbar input:focus {
+  outline: none;
+}
