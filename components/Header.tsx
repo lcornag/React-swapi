@@ -1,12 +1,10 @@
 import Link from 'next/link';
 
 import Footer from '@components/Footer';
+import LiveSearch from '@components/LiveSearch';
 
 import './Header.scss';
-import { FaHome } from 'react-icons/fa';
-import { FaListUl } from 'react-icons/fa';
-import { FaSearch } from 'react-icons/fa';
-import { FaHistory } from 'react-icons/fa';
+import { FaHome, FaListUl, FaHistory } from 'react-icons/fa';
 
 const Header = () => {
   return (
@@ -29,8 +27,7 @@ const Header = () => {
         <FaHistory size={25} />
       </div>
       <div className="searchbar">
-        <FaSearch size={25} />
-        <input type="text" placeholder="Search!" />
+        <LiveSearch />
       </div>
     </div>
   );

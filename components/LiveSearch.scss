@@ -1,0 +1,35 @@
+.liveSearchWrapper {
+  display: flex;
+  position: relative;
+}
+input {
+  background-color: black;
+  color: white;
+  border: none;
+  padding-left: 10%;
+  width: 100%;
+  height: 100%;
+}
+input:focus {
+  outline: none;
+}
+.resultsContainer {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  width: 100%;
+}
+.resultItem {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  margin: -2px 0;
+  background-color: black;
+}
+.itemName {
+  color: white;
+  padding-left: 0.5rem;
+}
+.itemGender {
+  margin: auto 0.5rem auto auto;
+}
