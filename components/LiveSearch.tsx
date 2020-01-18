@@ -2,12 +2,12 @@ import React from 'react';
 import Link from 'next/link';
 
 import axios from 'axios';
-import { baseUrl } from './config';
+import { peopleUrl } from './config';
 
 import './LiveSearch.scss';
 import { FaSearch } from 'react-icons/fa';
 
-interface State {
+interface LiveSearchState {
   query: string;
   value: string;
   fetchedData: any[];
@@ -17,8 +17,8 @@ interface State {
   hideResults: boolean;
 }
 
-class LiveSearch extends React.Component<{}, State> {
-  constructor(props: State) {
+class LiveSearch extends React.Component<{}, LiveSearchState> {
+  constructor(props: LiveSearchState) {
     super(props);
 
     this.state = {
@@ -35,6 +35,7 @@ class LiveSearch extends React.Component<{}, State> {
   handleOnInputChange = e => {
     const query = e.target.value;
     this.setState({ query, isLoading: true, msg: '' }, () => {
+      // TODO: cancel pending requests while typing (axios cancel token);
       this.fetchLiveResults(query);
     });
   };
@@ -44,7 +45,7 @@ class LiveSearch extends React.Component<{}, State> {
   };
 
   fetchLiveResults = query => {
-    const url = `${baseUrl}/people/?search=${query}`;
+    const url = `${peopleUrl}/?search=${query}`;
 
     axios
       .get(url)
@@ -62,10 +63,11 @@ class LiveSearch extends React.Component<{}, State> {
 
   renderResults = () => {
     const { fetchedData } = this.state;
-    if (fetchedData.length > 0 || !fetchedData) {
-      return fetchedData.map(item => {
+    if (fetchedData.length > 0) {
+      return fetchedData.map((item, index) => {
         return (
-          <Link href="/detail" key={item.name}>
+          // item lacks id property
+          <Link href="/detail" key={index}>
             <a className="resultItem">
               <div className="itemName">{item.name}</div>
               <div className="itemGender">{item.gender}</div>
@@ -89,7 +91,7 @@ class LiveSearch extends React.Component<{}, State> {
           value={query}
           onClick={() => this.shouldHideResults(false)}
           onChange={this.handleOnInputChange}
-          //   onBlur={() => this.shouldHideResults(true)}
+          onBlur={() => this.shouldHideResults(true)}
         />
         <FaSearch size={20} />
         {!hideResults && (
