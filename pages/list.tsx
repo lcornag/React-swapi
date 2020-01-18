@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 import axios from 'axios';
 import Layout from '@components/Layout';
+import '@components/list.scss';
 
-import '../components/list.scss';
 import { peopleUrl } from '../components/config';
 
 interface Character {
@@ -15,22 +15,22 @@ interface Character {
   homeworld: string;
 }
 
-interface DetailProps {
+interface ListProps {
   count: number;
   next: string | null;
   previous: string | null;
   results: Character[];
 }
 
-interface DetailState {
+interface ListState {
   count: number;
   next: string;
   previous: string;
   results: Character[];
 }
 
-class Detail extends React.Component<DetailProps, DetailState> {
-  // don't fully understand how getInitialProps work with an initial state
+class List extends React.Component<ListProps, ListState> {
+  // don't fully understand how getInitialProps work with a initial state
   static async getInitialProps(context) {
     const res = await axios.get(peopleUrl);
     const data = await res.data;
@@ -42,7 +42,7 @@ class Detail extends React.Component<DetailProps, DetailState> {
       results: data.results,
     };
   }
-  constructor(props: DetailState) {
+  constructor(props: ListState) {
     super(props);
 
     this.state = {
@@ -58,7 +58,7 @@ class Detail extends React.Component<DetailProps, DetailState> {
     if (results.length > 0) {
       return results.map((item: Character, index) => {
         return (
-          <Link href="/detail/[name]" as={`/detail/${item.name}`} key={index}>
+          <Link href="/detail/[name]" as={`/detail/${index + 1}`} key={index}>
             <a className="listItem">
               <div className="itemData">
                 <p className="listItemName">{item.name}</p>
@@ -94,4 +94,4 @@ class Detail extends React.Component<DetailProps, DetailState> {
   }
 }
 
-export default Detail;
+export default List;

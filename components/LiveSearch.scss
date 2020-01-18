@@ -25,10 +25,8 @@ input:focus {
   height: 3rem;
   margin: -2px 0;
   background-color: black;
-}
-.itemName {
-  color: white;
-  padding-left: 0.5rem;
+  color: white !important;
+  text-decoration: none !important;
 }
 .itemGender {
   margin: auto 0.5rem auto auto;

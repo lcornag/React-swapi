@@ -28,7 +28,7 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
       isLoading: false,
       msg: '',
       noResults: '',
-      hideResults: true,
+      hideResults: false,
     };
   }
 
@@ -40,12 +40,12 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
     });
   };
 
-  shouldHideResults = bool => {
-    this.setState({ hideResults: bool });
+  hideResults = val => {
+    this.setState({ hideResults: val });
   };
 
   fetchLiveResults = query => {
-    const url = `${peopleUrl}/?search=${query}`;
+    const url = `${peopleUrl}?search=${query}`;
 
     axios
       .get(url)
@@ -67,8 +67,12 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
       return fetchedData.map((item, index) => {
         return (
           // item lacks id property
-          <Link href="/detail" key={index}>
-            <a className="resultItem">
+          <Link
+            href="/detail/[id]"
+            as={`/detail/${item.url.match(/\d+/)}`}
+            key={index}
+          >
+            <a className="resultItem" onClick={() => this.hideResults(true)}>
               <div className="itemName">{item.name}</div>
               <div className="itemGender">{item.gender}</div>
             </a>
@@ -89,12 +93,13 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
           placeholder="Live search!"
           id="live-search-input"
           value={query}
-          onClick={() => this.shouldHideResults(false)}
           onChange={this.handleOnInputChange}
-          onBlur={() => this.shouldHideResults(true)}
+          onClick={() => this.hideResults(false)}
         />
         <FaSearch size={20} />
         {!hideResults && (
+          // TODO: Hide absolute dropdown on click away,
+          // behaviour collides with Link href
           <div className="resultsContainer">{this.renderResults()}</div>
         )}
       </div>
