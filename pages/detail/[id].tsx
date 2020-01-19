@@ -2,13 +2,12 @@ import { useRouter } from 'next/router';
 import Layout from '@components/Layout';
 import Detail from '@components/Detail';
 
-export default function Post() {
+export default function CharacterDetail() {
   const router = useRouter();
-
+  const characterSwapiId = router.query.id;
   return (
     <Layout>
-      <h1>{router.query.id}</h1>
-      <Detail />
+      {characterSwapiId && <Detail characterSwapiId={router.query.id} />}
     </Layout>
   );
 }

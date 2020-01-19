@@ -52,12 +52,11 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
       .then(res => {
         this.setState({
           fetchedData: res.data.results,
-          isLoading: false,
           noResults: res.data.results.length > 0 ? 'No results found' : '',
         });
       })
-      .catch(err => {
-        this.setState({ isLoading: false, msg: err.message });
+      .catch(e => {
+        console.log(e.message);
       });
   };
 
@@ -66,10 +65,10 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
     if (fetchedData.length > 0) {
       return fetchedData.map((item, index) => {
         return (
-          // item lacks id property
           <Link
             href="/detail/[id]"
             as={`/detail/${item.url.match(/\d+/)}`}
+            // item lacks id property
             key={index}
           >
             <a className="resultItem" onClick={() => this.hideResults(true)}>
