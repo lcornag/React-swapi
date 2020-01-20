@@ -13,7 +13,6 @@ interface LiveSearchState {
   fetchedData: any[];
   isLoading: boolean;
   msg: string;
-  noResults: string;
   hideResults: boolean;
 }
 
@@ -27,7 +26,6 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
       fetchedData: [],
       isLoading: false,
       msg: '',
-      noResults: '',
       hideResults: false,
     };
   }
@@ -43,16 +41,13 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
   hideResults = val => {
     this.setState({ hideResults: val });
   };
-
   fetchLiveResults = query => {
     const url = `${peopleUrl}?search=${query}`;
-
     axios
       .get(url)
       .then(res => {
         this.setState({
           fetchedData: res.data.results,
-          noResults: res.data.results.length > 0 ? 'No results found' : '',
         });
       })
       .catch(e => {
@@ -68,7 +63,6 @@ class LiveSearch extends React.Component<{}, LiveSearchState> {
           <Link
             href="/detail/[id]"
             as={`/detail/${item.url.match(/\d+/)}`}
-            // item lacks id property
             key={index}
           >
             <a className="resultItem" onClick={() => this.hideResults(true)}>

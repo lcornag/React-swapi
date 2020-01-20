@@ -1,6 +1,7 @@
 .listBody {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .navButtons {
   margin: 2rem 0;
@@ -43,4 +44,24 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 0 10%;
+}
+.btnGroup {
+  height: fit-content;
+  color: white;
+  position: absolute;
+  display: flex;
+  right: 0;
+  padding: 0.5rem 1rem;
+  background-color: black;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+}
+.btnActive,
+.btnUnactive {
+  margin: 0 0.5rem;
+  padding: 0;
+}
+.btnUnactive {
+  opacity: 0.5;
+  pointer-events: none;
 }

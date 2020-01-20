@@ -3,7 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import { peopleUrl } from './config';
 
-import './Detail.scss';
+import '@components/Detail.scss';
 
 interface CharacterIdProp {
   characterSwapiId: string | string[];
@@ -17,7 +17,6 @@ interface CharacterState {
   eye_color: string;
   birth_year: string;
   gender: string;
-  homeworld: string;
   films: string[];
   filmNames: string[];
   charData: boolean;
@@ -37,7 +36,6 @@ class Detail extends React.Component<CharacterIdProp, CharacterState> {
       eye_color: '',
       birth_year: '',
       gender: '',
-      homeworld: '',
       films: [],
       filmNames: [],
       charData: false,
@@ -46,6 +44,17 @@ class Detail extends React.Component<CharacterIdProp, CharacterState> {
   }
   componentDidMount() {
     const { characterSwapiId } = this.props;
+    this.fetchData(characterSwapiId);
+  }
+  componentDidUpdate(prevProps) {
+    const { characterSwapiId } = this.props;
+    if (prevProps.characterSwapiId !== characterSwapiId) {
+      //should show (non-developed yet) loader while !charData and/or !charFilms
+      this.setState({ charData: false, charFilms: false });
+      this.fetchData(characterSwapiId);
+    }
+  }
+  fetchData(characterSwapiId) {
     axios
       .get(`${peopleUrl}${characterSwapiId}/`)
       .then(({ data }) => {
@@ -58,7 +67,6 @@ class Detail extends React.Component<CharacterIdProp, CharacterState> {
           eye_color: data.eye_color,
           birth_year: data.birth_year,
           gender: data.gender,
-          homeworld: data.homeworld,
           films: data.films,
         });
         // once data for char is available, display it
@@ -88,7 +96,6 @@ class Detail extends React.Component<CharacterIdProp, CharacterState> {
       eye_color,
       birth_year,
       gender,
-      homeworld,
     } = this.state;
     return (
       <div className="detailContainer">

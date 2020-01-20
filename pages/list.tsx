@@ -5,6 +5,8 @@ import axios from 'axios';
 import Layout from '@components/Layout';
 import '@components/list.scss';
 
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
 import { peopleUrl } from '../components/config';
 
 interface Character {
@@ -18,14 +20,14 @@ interface Character {
 interface ListProps {
   count: number;
   next: string | null;
-  previous: string | null;
+  prev: string | null;
   results: Character[];
 }
 
 interface ListState {
   count: number;
   next: string;
-  previous: string;
+  prev: string;
   results: Character[];
 }
 
@@ -38,7 +40,7 @@ class List extends React.Component<ListProps, ListState> {
     return {
       count: data.count,
       next: data.next,
-      previous: data.previous,
+      prev: data.previous,
       results: data.results,
     };
   }
@@ -46,15 +48,24 @@ class List extends React.Component<ListProps, ListState> {
     super(props);
 
     this.state = {
-      count: 0,
-      next: '',
-      previous: '',
-      results: [],
+      count: props.count,
+      next: props.next,
+      prev: props.prev,
+      results: props.results,
     };
+  }
+  componentDidMount() {
+    this.setState({
+      count: this.props.count,
+      next: this.props.next,
+      prev: this.props.prev,
+      results: this.props.results,
+    });
   }
 
   renderResults = () => {
-    const { results } = this.props;
+    const { results } = this.state;
+
     if (results.length > 0) {
       return results.map((item: Character, index) => {
         return (
@@ -82,11 +93,39 @@ class List extends React.Component<ListProps, ListState> {
     }
   };
 
+  getPage(url) {
+    axios.get(url).then(({ data }) => {
+      this.setState({
+        count: data.count,
+        next: data.next,
+        prev: data.previous,
+        results: data.results,
+      });
+    });
+    //not working
+    window.scroll(0, 0);
+  }
+
   render() {
+    const { next, prev, count, results } = this.state;
     return (
       <Layout>
         <div className="listBody">
-          {/* <div className="navButtons">asd</div> */}
+          <div className="btnGroup">
+            <div
+              className={prev ? 'btnActive' : 'btnUnactive'}
+              onClick={() => this.getPage(prev)}
+            >
+              <FaChevronLeft size={35} />
+            </div>
+            <div
+              className={next ? 'btnActive' : 'btnUnactive'}
+              onClick={() => this.getPage(next)}
+            >
+              <FaChevronRight size={35} />
+            </div>
+          </div>
+
           <div className="scrollableWrapper">{this.renderResults()}</div>
         </div>
       </Layout>

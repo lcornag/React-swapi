@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import { Router } from 'next/router';
 
 import Footer from '@components/Footer';
 import LiveSearch from '@components/LiveSearch';
+import History from '@components/History';
 
 import './Header.scss';
-import { FaHome, FaListUl, FaHistory } from 'react-icons/fa';
+import { FaHome, FaListUl } from 'react-icons/fa';
 
 const Header = () => {
   return (
@@ -24,7 +26,7 @@ const Header = () => {
         </div>
       </Link>
       <div className="lastVisited">
-        <FaHistory size={25} />
+        <History />
       </div>
       <div className="searchbar">
         <LiveSearch />
