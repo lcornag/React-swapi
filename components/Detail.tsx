@@ -20,6 +20,8 @@ interface CharacterState {
   homeworld: string;
   films: string[];
   filmNames: string[];
+  charData: boolean;
+  charFilms: boolean;
 }
 
 class Detail extends React.Component<CharacterIdProp, CharacterState> {
@@ -38,33 +40,45 @@ class Detail extends React.Component<CharacterIdProp, CharacterState> {
       homeworld: '',
       films: [],
       filmNames: [],
+      charData: false,
+      charFilms: false,
     };
   }
-  async componentDidMount() {
+  componentDidMount() {
     const { characterSwapiId } = this.props;
-    await this.getCharacterInfo(characterSwapiId);
+    axios
+      .get(`${peopleUrl}${characterSwapiId}/`)
+      .then(({ data }) => {
+        this.setState({
+          name: data.name,
+          height: data.height,
+          mass: data.mass,
+          hair_color: data.hair_color,
+          skin_color: data.skin_color,
+          eye_color: data.eye_color,
+          birth_year: data.birth_year,
+          gender: data.gender,
+          homeworld: data.homeworld,
+          films: data.films,
+        });
+        // once data for char is available, display it
+        this.setState({ charData: true });
+        // and start getting the films
+        return Promise.all(
+          this.state.films.map(async film => {
+            const res = await axios.get(film);
+            return res.data.title;
+          })
+        );
+      })
+      .then(names => {
+        // once we have the films, display them
+        this.setState({ charFilms: true });
+        this.setState({ filmNames: names });
+      })
+      .catch(e => console.log(e.message));
   }
-  getCharacterInfo(id) {
-    if (id) {
-      return axios
-        .get(`${peopleUrl}${id}/`)
-        .then(({ data }) => {
-          this.setState({
-            name: data.name,
-            height: data.height,
-            mass: data.mass,
-            hair_color: data.hair_color,
-            skin_color: data.skin_color,
-            eye_color: data.eye_color,
-            birth_year: data.birth_year,
-            gender: data.gender,
-            homeworld: data.homeworld,
-            films: data.films,
-          });
-        })
-        .catch(e => console.log(e.message));
-    }
-  }
+
   renderCharacterInfo() {
     const {
       name,
@@ -78,37 +92,55 @@ class Detail extends React.Component<CharacterIdProp, CharacterState> {
     } = this.state;
     return (
       <div className="detailContainer">
-        <div className="detailInfo">{name}</div>
-        <div className="detailInfo">{height}</div>
-        <div className="detailInfo">{hair_color}</div>
-        <div className="detailInfo">{skin_color}</div>
-        <div className="detailInfo">{eye_color}</div>
-        <div className="detailInfo">{birth_year}</div>
-        <div className="detailInfo">{gender}</div>
+        <div className="detailInfo">
+          <p className="detailInfoName">{name}</p>
+        </div>
+        <div className="detailInfo">
+          <p>height:</p>
+          <p>{height}</p>
+        </div>
+        <div className="detailInfo">
+          <p>hair color:</p>
+          <p>{hair_color}</p>
+        </div>
+        <div className="detailInfo">
+          <p>skin color:</p>
+          <p>{skin_color}</p>
+        </div>
+        <div className="detailInfo">
+          <p>eye color:</p>
+          <p>{eye_color}</p>
+        </div>
+        <div className="detailInfo">
+          <p>birth year:</p>
+          <p>{birth_year}</p>
+        </div>
+        <div className="detailInfo">
+          <p>gender</p>
+          <p>{gender}</p>
+        </div>
       </div>
     );
   }
 
-  getCharacterFilms(films) {
-    const promise = Promise.all(
-      films.map(async film => {
-        const res = await axios.get(film);
-        return res.data.title;
-      })
-    ).then(names => {
-      console.log(names);
-      return names;
-    });
-    return promise;
+  renderCharFilms() {
+    const { filmNames } = this.state;
+    return (
+      <div className="filmContainer">
+        {filmNames.map((film, index) => {
+          return <p key={index}>{film}</p>;
+        })}
+      </div>
+    );
   }
 
   render() {
-    const { films, filmNames } = this.state;
-    const a = this.getCharacterFilms(films);
+    const { charData, charFilms } = this.state;
     return (
       <div className="detailWrapper">
-        {this.renderCharacterInfo()}
-        {/* {this.renderCharFilms(films, filmNames)} */}
+        {charData && this.renderCharacterInfo()}
+        {charData && <p className="filmTitle">Appears in: </p>}
+        {charFilms && this.renderCharFilms()}
       </div>
     );
   }
